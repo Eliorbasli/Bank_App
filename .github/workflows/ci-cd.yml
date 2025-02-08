@@ -8,6 +8,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready -U test_user -d test_db" --health-timeout=30s --health-retries=3
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -20,26 +30,47 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
 
-      - name: Set PYTHONPATH for tests
+      - name: Set Environment Variables
         run: |
-          export PYTHONPATH=$(pwd)
-        # pytest
+          export DATABASE_URL=postgresql://test_user:test_password@localhost:5432/test_db
 
-  build-and-deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: Run Tests
+        run: pytest
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v3
 
-      # - name: Log in to DockerHub
-      # run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+#       - name: Set up Python
+#         uses: actions/setup-python@v3
+#         with:
+#           python-version: "3.10"
 
-      # - name: Build and Push Docker Image
-      # run: |
-      # docker build -t mydockerhub/fastapi-bank:latest .
-      # docker push mydockerhub/fastapi-bank:latest
+#       - name: Install Dependencies
+#         run: pip install -r requirements.txt
 
-      # - name: Deploy to Kubernetes
-      # run: |
-      # kubectl apply -f k8s/
+#       - name: Set PYTHONPATH for tests
+#         run: |
+#           export PYTHONPATH=$(pwd)
+#         # pytest
+
+#   build-and-deploy:
+#     needs: test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v3
+
+# - name: Log in to DockerHub
+# run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+# - name: Build and Push Docker Image
+# run: |
+# docker build -t mydockerhub/fastapi-bank:latest .
+# docker push mydockerhub/fastapi-bank:latest
+
+# - name: Deploy to Kubernetes
+# run: |
+# kubectl apply -f k8s/
