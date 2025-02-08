@@ -7,6 +7,8 @@ alembic==1.13.2
 # FastAPI and Web Framework
 fastapi==0.110.0
 uvicorn[standard]==0.29.0
+fastapi-cache2
+redis
 
 # Authentication & Security
 bcrypt==4.2.0
