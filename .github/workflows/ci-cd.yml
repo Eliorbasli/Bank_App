@@ -20,8 +20,10 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Tests
-        run: pytest
+      - name: Set PYTHONPATH for tests
+        run: |
+          export PYTHONPATH=$(pwd)/app
+          pytest
 
   build-and-deploy:
     needs: test
