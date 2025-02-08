@@ -22,7 +22,7 @@ jobs:
 
       - name: Set PYTHONPATH for tests
         run: |
-          export PYTHONPATH=$(pwd)/app
+          export PYTHONPATH=$(pwd)
           pytest
 
   build-and-deploy:
