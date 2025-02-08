@@ -12,12 +12,12 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: test_db
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: bankdb
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready -U test_user -d test_db" --health-timeout=30s --health-retries=3
+        options: --health-cmd="pg_isready -U user -d bankdb" --health-timeout=30s --health-retries=3
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -32,7 +32,7 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          export DATABASE_URL=postgresql://test_user:test_password@localhost:5432/test_db
+          export DATABASE_URL=postgresql://user:password@localhost:5432/bankdb
 
       - name: Run Tests
         run: pytest
