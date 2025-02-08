@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
-from app.main import app
+from app.main import B_app
 
-client = TestClient(app)
+client = TestClient(B_app)
 
 def test_register_account():
     response = client.post("/api/v1/register", json={"owner_name": "John Doe"})

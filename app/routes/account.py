@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from ..database import SessionLocal
-from ..services.account_service import create_account, get_account
-from ..schemas import AccountCreate, AccountResponse
+from app.database import SessionLocal
+from app.services.account_service import create_account, get_account
+from app.schemas import AccountCreate, AccountResponse
 
 router = APIRouter()
 
